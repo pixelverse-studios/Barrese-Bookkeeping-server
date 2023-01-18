@@ -77,7 +77,7 @@ module.exports.UserMutations = {
             return new Error(error)
         }
     },
-    async updateUser(_, { address, role, background, contactLinks }, context) {
+    async updateUser(_, data, context) {
         const token = validateToken(context)
         if (!token || !isTokenExpired(token.exp)) {
             return buildResponse.user.errors.invalidToken()
@@ -85,12 +85,11 @@ module.exports.UserMutations = {
 
         try {
             const userToUpdate = await User.findOne({ email: token.user.email })
-            userToUpdate.address = address ?? userToUpdate.address
-            userToUpdate.role = role ?? userToUpdate.role
-            userToUpdate.background = background ?? userToUpdate.background
-            userToUpdate.contactLinks =
-                contactLinks ?? userToUpdate.contactLinks
-
+            for (const [key, value] of Object.entries(data)) {
+                if (value) {
+                    userToUpdate[key] = value
+                }
+            }
             const updatedUser = await userToUpdate.save()
             const newToken = generateToken(updatedUser)
             return buildResponse.user.success.loggedIn(updatedUser, newToken)

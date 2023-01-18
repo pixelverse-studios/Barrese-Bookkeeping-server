@@ -25,10 +25,10 @@ const typeDefs = gql`
         title: String
     }
 
-    input ContactLinkInput {
-        icon: String
-        url: String
-        title: String
+    type CallToActionTypes {
+        thumbnail: String
+        emphasized: String
+        description: String
     }
 
     type UserFields {
@@ -41,6 +41,7 @@ const typeDefs = gql`
         role: String
         background: String
         contactLinks: [ContactLinkTypes]
+        callToAction: CallToActionTypes
         token: String
     }
 
@@ -58,6 +59,7 @@ const typeDefs = gql`
         role: String
         background: String
         contactLinks: [ContactLinkTypes]
+        callToAction: CallToActionTypes
         token: String
     }
 
@@ -74,6 +76,19 @@ const typeDefs = gql`
 
     union UserResponse = UserSuccess | Errors
     union MultiUserResponse = MultipleUsersSuccess | Errors
+
+    # Inputs
+    input ContactLinkInput {
+        icon: String
+        url: String
+        title: String
+    }
+
+    input CallToActionInput {
+        thumbnail: String
+        emphasized: String
+        description: String
+    }
 
     type Query {
         # USERS
@@ -96,6 +111,7 @@ const typeDefs = gql`
             role: String
             background: String
             contactLinks: [ContactLinkInput]
+            callToAction: CallToActionInput
         ): UserResponse
         updatePassword(
             email: String!

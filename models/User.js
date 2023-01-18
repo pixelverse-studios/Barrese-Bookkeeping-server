@@ -10,7 +10,13 @@ const userSchema = new Schema({
     address: String,
     role: String,
     background: String,
-    contactLinks: [{ icon: String, url: String, title: String }]
+    contactLinks: [{ icon: String, url: String, title: String }],
+    footerDescription: String,
+    callToAction: {
+        thumbnail: String,
+        emphasized: String,
+        description: String
+    }
 })
 
 module.exports = model('User', userSchema)
