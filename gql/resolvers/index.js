@@ -1,9 +1,12 @@
 const { UserQueries, UserMutations } = require('./users')
+const { AboutQueries, AboutMutations } = require('./about')
 
 const Query = {
-    ...UserQueries
+    ...UserQueries,
+    ...AboutQueries
 }
 const Mutation = {
-    ...UserMutations
+    ...UserMutations,
+    ...AboutMutations
 }
 module.exports = { Query, Mutation }
