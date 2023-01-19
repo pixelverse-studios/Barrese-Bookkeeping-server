@@ -10,13 +10,13 @@ const {
 const {
     generateToken,
     generateResetPwToken,
-    isTokenExpired
+    isTokenExpired,
+    validateToken
 } = require('../../utils/token')
 const buildResponse = require('../../utils/responseHandlers')
 const {
     resetPasswordEmail
 } = require('../../utils/mailer/user/resetPasswordEmail')
-const { validateToken } = require('../../utils/token')
 
 module.exports.UserMutations = {
     async register(_, { email, password, firstName, lastName }) {

@@ -15,6 +15,9 @@ const typeDefs = gql`
         invalidCredentials
         matchingPasswords
 
+        # CMS
+        cmsItemNotFound
+
         # GENERAL
         fetched
     }
@@ -77,6 +80,13 @@ const typeDefs = gql`
     union UserResponse = UserSuccess | Errors
     union MultiUserResponse = MultipleUsersSuccess | Errors
 
+    type AboutSuccess {
+        _id: ID!
+        description: [String]
+    }
+
+    union CMSResponse = AboutSuccess | Errors
+
     # Inputs
     input ContactLinkInput {
         icon: String
@@ -95,6 +105,9 @@ const typeDefs = gql`
         getUser(email: String!): UserResponse!
         getAllUsers: MultiUserResponse!
         getLoggedInUser: UserResponse!
+
+        # ABOUT
+        getAboutItems: CMSResponse
     }
 
     type Mutation {
@@ -120,6 +133,10 @@ const typeDefs = gql`
         ): UserResponse
         deleteUser(id: String!): MultiUserResponse
         sendPasswordResetEmail(email: String!): UserResponse
+
+        # ABOUT
+        createAboutItem(description: [String]!): CMSResponse
+        editAboutItem(_id: ID!, updated: [String]!): CMSResponse
     }
 `
 
