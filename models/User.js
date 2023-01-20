@@ -12,6 +12,7 @@ const userSchema = new Schema({
     background: String,
     contactLinks: [{ icon: String, url: String, title: String }],
     footerDescription: String,
+    profileImg: String,
     callToAction: {
         thumbnail: String,
         emphasized: String,
