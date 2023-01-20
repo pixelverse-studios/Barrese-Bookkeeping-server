@@ -45,6 +45,7 @@ const typeDefs = gql`
         background: String
         contactLinks: [ContactLinkTypes]
         callToAction: CallToActionTypes
+        profileImg: String
         token: String
     }
 
@@ -63,6 +64,7 @@ const typeDefs = gql`
         background: String
         contactLinks: [ContactLinkTypes]
         callToAction: CallToActionTypes
+        profileImg: String
         token: String
     }
 
@@ -125,6 +127,7 @@ const typeDefs = gql`
             background: String
             contactLinks: [ContactLinkInput]
             callToAction: CallToActionInput
+            profileImg: String
         ): UserResponse
         updatePassword(
             email: String!
