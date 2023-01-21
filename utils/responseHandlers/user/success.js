@@ -1,5 +1,5 @@
 const USER_SUCCESS = 'UserSuccess'
-const MULTI_USER_SUCCESS = 'MultipleUsersSuccess'
+const MULTI_USER_SUCCESS = 'MultiUsersSuccess'
 const DEV_HOURS_SUCCESS = 'DeveloperHoursSuccess'
 
 const baseArrayResponse = users => ({

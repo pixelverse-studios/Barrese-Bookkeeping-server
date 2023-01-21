@@ -45,10 +45,11 @@ const typeDefs = gql`
         background: String
         contactLinks: [ContactLinkTypes]
         callToAction: CallToActionTypes
+        profileImg: String
         token: String
     }
 
-    type MultipleUsersSuccess {
+    type MultiUsersSuccess {
         users: [UserFields]
     }
 
@@ -63,6 +64,7 @@ const typeDefs = gql`
         background: String
         contactLinks: [ContactLinkTypes]
         callToAction: CallToActionTypes
+        profileImg: String
         token: String
     }
 
@@ -78,7 +80,7 @@ const typeDefs = gql`
     }
 
     union UserResponse = UserSuccess | Errors
-    union MultiUserResponse = MultipleUsersSuccess | Errors
+    union MultiUserResponse = MultiUsersSuccess | Errors
 
     type AboutSuccess {
         _id: ID!
@@ -100,7 +102,22 @@ const typeDefs = gql`
         offerings: [ServiceOffering]
     }
 
-    union CMSResponse = AboutSuccess | ServicesSuccess | Errors
+    type FAQsSuccess {
+        _id: ID!
+        question: String
+        answer: String
+    }
+
+    type MultiFAQsSuccess {
+        faqs: [FAQsSuccess]
+    }
+
+    union AboutResponse = AboutSuccess | Errors
+    union ServicesResponse = ServicesSuccess | Errors
+    union FAQsResponse = FAQsSuccess | Errors
+    union MultiFAQsResponse = MultiFAQsSuccess | Errors
+
+    # union CMSResponse = AboutSuccess | ServicesSuccess | FAQsSuccess | Errors
 
     # Inputs
     input ContactLinkInput {
@@ -122,10 +139,13 @@ const typeDefs = gql`
         getLoggedInUser: UserResponse!
 
         # ABOUT
-        getAboutItems: CMSResponse
+        getAboutItems: AboutResponse
 
         # SERVICES
-        getServices: CMSResponse
+        getServices: ServicesResponse
+
+        # FAQs
+        getFAQs: MultiFAQsResponse
     }
 
     input ServiceOfferingFields {
@@ -150,6 +170,7 @@ const typeDefs = gql`
             background: String
             contactLinks: [ContactLinkInput]
             callToAction: CallToActionInput
+            profileImg: String
         ): UserResponse
         updatePassword(
             email: String!
@@ -160,8 +181,8 @@ const typeDefs = gql`
         sendPasswordResetEmail(email: String!): UserResponse
 
         # ABOUT
-        createAboutItem(description: [String]!): CMSResponse
-        editAboutItem(_id: ID!, updated: [String]!): CMSResponse
+        createAboutItem(description: [String]!): AboutResponse
+        editAboutItem(_id: ID!, updated: [String]!): AboutResponse
 
         # SERVICES
         editServices(
@@ -170,7 +191,16 @@ const typeDefs = gql`
             pageH2: String
             description: String
             offerings: [ServiceOfferingFields]
-        ): CMSResponse
+        ): ServicesResponse
+
+        # FAQs
+        createFAQItem(question: String!, answer: String!): MultiFAQsResponse
+        editFAQItem(
+            _id: ID!
+            question: String
+            answer: String
+        ): MultiFAQsResponse
+        deleteFAQItem(_id: ID!): MultiFAQsResponse
     }
 `
 

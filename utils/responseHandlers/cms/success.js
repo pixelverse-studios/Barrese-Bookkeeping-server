@@ -1,6 +1,6 @@
-const baseArrayResponse = ({ data, __typename }) => ({
+const baseArrayResponse = ({ data, __typename, key }) => ({
     __typename,
-    data
+    [key]: data
 })
 
 const baseResponse = ({ data, __typename }) => {
@@ -12,15 +12,17 @@ const baseResponse = ({ data, __typename }) => {
     return response
 }
 
-const routeForResponseType = (data, typename) => {
-    if (typename.includes('Multiple')) {
-        return baseArrayResponse({ data, __typename: typename })
+const routeForResponseType = (data, typename, key) => {
+    if (typename.includes('Multi')) {
+        return baseArrayResponse({ data, __typename: typename, key })
     }
 
     return baseResponse({ data, __typename: typename })
 }
 
 module.exports = {
-    cmsUpdated: (data, typename) => routeForResponseType(data, typename),
-    cmsItemFetched: (data, typename) => routeForResponseType(data, typename)
+    cmsUpdated: (data, typename, key) =>
+        routeForResponseType(data, typename, key),
+    cmsItemFetched: (data, typename, key) =>
+        routeForResponseType(data, typename, key)
 }
