@@ -85,7 +85,22 @@ const typeDefs = gql`
         description: [String]
     }
 
-    union CMSResponse = AboutSuccess | Errors
+    type ServiceOffering {
+        icon: String
+        title: String
+        description: String
+        bullets: [String]
+    }
+
+    type ServicesSuccess {
+        _id: ID!
+        pageH1: String
+        pageH2: String
+        description: String
+        offerings: [ServiceOffering]
+    }
+
+    union CMSResponse = AboutSuccess | ServicesSuccess | Errors
 
     # Inputs
     input ContactLinkInput {
@@ -108,6 +123,16 @@ const typeDefs = gql`
 
         # ABOUT
         getAboutItems: CMSResponse
+
+        # SERVICES
+        getServices: CMSResponse
+    }
+
+    input ServiceOfferingFields {
+        icon: String
+        title: String
+        description: String
+        bullets: [String]
     }
 
     type Mutation {
@@ -137,6 +162,15 @@ const typeDefs = gql`
         # ABOUT
         createAboutItem(description: [String]!): CMSResponse
         editAboutItem(_id: ID!, updated: [String]!): CMSResponse
+
+        # SERVICES
+        editServices(
+            _id: ID!
+            pageH1: String
+            pageH2: String
+            description: String
+            offerings: [ServiceOfferingFields]
+        ): CMSResponse
     }
 `
 
