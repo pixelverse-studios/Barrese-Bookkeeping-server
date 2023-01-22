@@ -15,7 +15,7 @@ module.exports.AboutMutations = {
             const newAbout = new About({ description })
             const saved = await newAbout.save()
 
-            return buildResponse.cms.success.cmsUpdated(saved, 'AboutSuccess')
+            return buildResponse.cms.success.cmsUpdated(saved, SINLGE_RESPONSE)
         } catch (error) {
             throw new Error(error)
         }
