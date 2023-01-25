@@ -17,6 +17,7 @@ const typeDefs = gql`
 
         # CMS
         cmsItemNotFound
+        noValidFieldsReceived
 
         # GENERAL
         fetched
@@ -115,6 +116,7 @@ const typeDefs = gql`
     }
 
     type CmsFields {
+        _id: ID!
         callToAction: CallToActionFields
         about: AboutFields
         footer: FooterFields
@@ -239,6 +241,10 @@ const typeDefs = gql`
             services: InputServicesFields
             faqs: InputFAQFields
             blog: InputBlogFields
+        ): CmsResponse
+        editCallToAction(
+            input: InputCallToActionFields
+            cmsId: ID!
         ): CmsResponse
     }
 `
