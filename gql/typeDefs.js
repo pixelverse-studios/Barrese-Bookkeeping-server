@@ -216,6 +216,12 @@ const typeDefs = gql`
         blog: [InputBlogFields]
     }
 
+    input InputServiceContentFields {
+        pageH1: String
+        pageH2: String
+        description: String
+    }
+
     type Mutation {
         # USERS
         register(
@@ -244,8 +250,29 @@ const typeDefs = gql`
         ): CmsResponse
         editCallToAction(
             input: InputCallToActionFields
-            cmsId: ID!
+            cmsID: ID!
         ): CmsResponse
+        editAbout(input: InputAboutFields, cmsID: ID!): CmsResponse
+        editFooter(input: InputFooterFields, cmsID: ID!): CmsResponse
+        editServiceContent(
+            input: InputServiceContentFields
+            cmsID: ID!
+        ): CmsResponse
+        createServiceOffering(
+            input: InputServiceOfferings
+            cmsID: ID!
+        ): CmsResponse
+        editServiceOffering(
+            input: InputServiceOfferings
+            offeringID: ID!
+            cmsID: ID!
+        ): CmsResponse
+        deleteServiceOffering(offeringID: ID!, cmsID: ID!): CmsResponse
+        createFaq(input: InputFAQFields, cmsID: ID!): CmsResponse
+        editFaq(input: InputFAQFields, faqID: ID!, cmsID: ID!): CmsResponse
+        deleteFaq(faqID: ID!, cmsID: ID!): CmsResponse
+        createBlog(input: InputBlogFields, cmsID: ID!): CmsResponse
+        deleteBlog(faqID: ID!, cmsID: ID!): CmsResponse
     }
 `
 
