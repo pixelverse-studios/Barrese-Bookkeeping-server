@@ -124,6 +124,7 @@ const typeDefs = gql`
         image: String
         title: String
         recap: String
+        content: [String]
         createdAt: Date
     }
 
@@ -143,13 +144,13 @@ const typeDefs = gql`
 
     type CmsFields {
         _id: ID!
+        landing: LandingFields
         callToAction: CallToActionFields
         about: AboutFields
         footer: FooterFields
         services: ServicesFields
         faqs: FAQFields
         blog: BlogFields
-        landing: LandingFields
     }
 
     union CmsResponse = CmsFields | Errors
@@ -244,6 +245,13 @@ const typeDefs = gql`
         image: String
         title: String
         recap: String
+        content: [String]
+    }
+
+    input InputBlogContent {
+        pageH1: String
+        pageH2: String
+        heroImage: String
     }
 
     input InputBlogFields {
@@ -319,9 +327,10 @@ const typeDefs = gql`
         editFaqItem(input: InputFAQFields, faqID: ID!, cmsID: ID!): CmsResponse
         deleteFaqItem(faqID: ID!, cmsID: ID!): CmsResponse
         editFaqContent(input: InputFAQContent, cmsID: ID!): CmsResponse
-        createBlog(input: InputBlogFields, cmsID: ID!): CmsResponse
-        editBlog(input: InputBlogFields, blogID: ID!, cmsID: ID!): CmsResponse
-        deleteBlog(faqID: ID!, cmsID: ID!): CmsResponse
+        createBlogItem(input: InputBlogItem, cmsID: ID!): CmsResponse
+        editBlogItem(input: InputBlogItem, blogID: ID!, cmsID: ID!): CmsResponse
+        deleteBlogItem(blogID: ID!, cmsID: ID!): CmsResponse
+        editBlogContent(input: InputBlogContent, cmsID: ID!): CmsResponse
     }
 `
 

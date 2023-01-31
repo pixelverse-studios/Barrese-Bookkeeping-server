@@ -292,15 +292,19 @@ module.exports.CmsMutations = {
             )
         }
 
-        const cms = await getCms(cmsID)
-        const faqToEdit = cms.faqs.qAndA.id(faqID)
-        faqToEdit.question = input.question
-            ? input.question
-            : faqToEdit.question
-        faqToEdit.answer = input.answer ? input.answer : faqToEdit.answer
+        try {
+            const cms = await getCms(cmsID)
+            const faqToEdit = cms.faqs.qAndA.id(faqID)
+            faqToEdit.question = input.question
+                ? input.question
+                : faqToEdit.question
+            faqToEdit.answer = input.answer ? input.answer : faqToEdit.answer
 
-        const updated = await cms.save()
-        return buildResponse.cms.success.edited(updated)
+            const updated = await cms.save()
+            return buildResponse.cms.success.edited(updated)
+        } catch (error) {
+            throw error
+        }
     },
     async deleteFaqItem(_, { faqID, cmsID }, context) {
         const token = validateToken(context)
@@ -351,9 +355,119 @@ module.exports.CmsMutations = {
             throw error
         }
     },
-    async createBlog() {},
-    async editBlog() {},
-    async deleteBlog() {}
+    async createBlogItem(_, { input, cmsID }, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
+
+        const isValid = Object.entries(input).every(([key, value]) => {
+            if (key === 'content') {
+                return value?.length > 0 && value.every(item => item)
+            } else {
+                return !!value
+            }
+        })
+        if (!isValid) {
+            return buildResponse.cms.errors.allValidFieldsMissing(
+                'Thumbnail, Image, Title, Recap, Content',
+                'Creating a new Blog'
+            )
+        }
+
+        try {
+            const cms = await getCms(cmsID)
+            cms.blog.blogs.push(input)
+
+            const updated = await cms.save()
+            return buildResponse.cms.success.edited(updated)
+        } catch (error) {
+            throw error
+        }
+    },
+    async editBlogItem(_, { input, cmsID, blogID }, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
+
+        const isValid = Object.entries(input).some(([key, value]) => {
+            if (key === 'content') {
+                return value?.length > 0 && value.every(item => item)
+            } else {
+                return !!value
+            }
+        })
+        if (!isValid) {
+            return buildResponse.cms.errors.minimumValidFieldsMissing(
+                'Thumbnail, Image, Title, Recap, Content',
+                'Editing a Blog'
+            )
+        }
+
+        try {
+            const cms = await getCms(cmsID)
+            const blogToEdit = cms.blog.blogs.id(blogID)
+            Object.entries(input).forEach(
+                ([key]) =>
+                    (blogToEdit[key] = input[key]
+                        ? input[key]
+                        : blogToEdit[key])
+            )
+
+            const updated = await cms.save()
+            return buildResponse.cms.success.edited(updated)
+        } catch (error) {
+            throw error
+        }
+    },
+    async deleteBlogItem(_, { cmsID, blogID }, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
+
+        try {
+            const cms = await getCms(cmsID)
+            const blogToDelete = cms.blog.blogs.id(blogID)
+
+            if (!blogToDelete) {
+                return buildResponse.cms.errors.cmsItemNotFound('That Blog was')
+            }
+
+            blogToDelete.remove()
+            const updated = await cms.save()
+            return buildResponse.cms.success.edited(updated)
+        } catch (error) {
+            throw error
+        }
+    },
+    async editBlogContent(_, { input, cmsID }, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
+
+        const isValid = Object.values(input).some(value => value)
+        if (!isValid) {
+            return buildResponse.cms.errors.minimumValidFieldsMissing(
+                'Hero Image, Page Primary Header, Page Secondary Header',
+                'editing Blog Content'
+            )
+        }
+
+        try {
+            const cms = await getCms(cmsID)
+            for (const [key, value] of Object.entries(input)) {
+                cms.blog[key] = value ? value : cms.blog[key]
+            }
+
+            const updated = await cms.save()
+            return buildResponse.cms.success.edited(updated)
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 module.exports.CmsQueries = {
