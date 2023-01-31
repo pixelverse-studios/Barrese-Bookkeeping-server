@@ -49,6 +49,7 @@ const cmsSchema = new Schema({
                 image: String,
                 title: String,
                 recap: String,
+                content: [String],
                 createdAt: { type: Date, default: Date.now }
             }
         ]
