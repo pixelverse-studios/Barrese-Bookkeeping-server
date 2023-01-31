@@ -6,18 +6,7 @@ const userSchema = new Schema({
     lastName: String,
     password: String,
     createdAt: { type: Date, default: Date.now },
-    updatedAt: Date,
-    address: String,
-    role: String,
-    background: String,
-    contactLinks: [{ icon: String, url: String, title: String }],
-    footerDescription: String,
-    profileImg: String,
-    callToAction: {
-        thumbnail: String,
-        emphasized: String,
-        description: String
-    }
+    updatedAt: Date
 })
 
 module.exports = model('User', userSchema)

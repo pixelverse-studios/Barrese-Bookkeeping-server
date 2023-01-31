@@ -17,21 +17,11 @@ const typeDefs = gql`
 
         # CMS
         cmsItemNotFound
+        minimumValidFieldsMissing
+        allValidFieldsMissing
 
         # GENERAL
         fetched
-    }
-
-    type ContactLinkTypes {
-        icon: String
-        url: String
-        title: String
-    }
-
-    type CallToActionTypes {
-        thumbnail: String
-        emphasized: String
-        description: String
     }
 
     type UserFields {
@@ -40,12 +30,6 @@ const typeDefs = gql`
         password: String!
         firstName: String
         lastName: String
-        address: String
-        role: String
-        background: String
-        contactLinks: [ContactLinkTypes]
-        callToAction: CallToActionTypes
-        profileImg: String
         token: String
     }
 
@@ -59,12 +43,6 @@ const typeDefs = gql`
         password: String!
         firstName: String
         lastName: String
-        address: String
-        role: String
-        background: String
-        contactLinks: [ContactLinkTypes]
-        callToAction: CallToActionTypes
-        profileImg: String
         token: String
     }
 
@@ -82,54 +60,107 @@ const typeDefs = gql`
     union UserResponse = UserSuccess | Errors
     union MultiUserResponse = MultiUsersSuccess | Errors
 
-    type AboutSuccess {
-        _id: ID!
-        description: [String]
+    # CMS
+    type CallToActionFields {
+        image: String
+        heading: String
+        description: String
+        buttonLabel: String
     }
 
-    type ServiceOffering {
+    type AboutFields {
+        profilePic: String
+        backgroundInfo: String
+        role: String
+        title: String
+        header: String
+        subHeader: String
+        heroImage: String
+    }
+
+    type ContactLinks {
+        _id: ID!
+        icon: String
+        link: String
+        title: String
+    }
+
+    type FooterFields {
+        contactLinks: [ContactLinks]
+    }
+
+    type ServiceOfferings {
+        _id: ID!
         icon: String
         title: String
         description: String
         bullets: [String]
     }
 
-    type ServicesSuccess {
-        _id: ID!
+    type ServicesFields {
         pageH1: String
         pageH2: String
         description: String
-        offerings: [ServiceOffering]
+        heroImage: String
+        offerings: [ServiceOfferings]
     }
 
-    type FAQsSuccess {
+    type FAQs {
         _id: ID!
         question: String
         answer: String
     }
 
-    type MultiFAQsSuccess {
-        faqs: [FAQsSuccess]
+    type FAQFields {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        qAndA: [FAQs]
     }
 
-    union AboutResponse = AboutSuccess | Errors
-    union ServicesResponse = ServicesSuccess | Errors
-    union FAQsResponse = FAQsSuccess | Errors
-    union MultiFAQsResponse = MultiFAQsSuccess | Errors
+    type BlogItem {
+        _id: ID!
+        thumbnail: String
+        image: String
+        title: String
+        recap: String
+        content: [String]
+        createdAt: Date
+    }
 
-    # union CMSResponse = AboutSuccess | ServicesSuccess | FAQsSuccess | Errors
+    type BlogFields {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        blogs: [BlogItem]
+    }
+
+    type LandingFields {
+        heroImage: String
+        heroBannerH1: String
+        heroBannerH2: String
+        subtext: String
+    }
+
+    type CmsFields {
+        _id: ID!
+        landing: LandingFields
+        callToAction: CallToActionFields
+        about: AboutFields
+        footer: FooterFields
+        services: ServicesFields
+        faqs: FAQFields
+        blog: BlogFields
+    }
+
+    union CmsResponse = CmsFields | Errors
 
     # Inputs
-    input ContactLinkInput {
-        icon: String
-        url: String
-        title: String
-    }
-
     input CallToActionInput {
         thumbnail: String
         emphasized: String
         description: String
+        buttonLabel: String
     }
 
     type Query {
@@ -138,14 +169,8 @@ const typeDefs = gql`
         getAllUsers: MultiUserResponse!
         getLoggedInUser: UserResponse!
 
-        # ABOUT
-        getAboutItems: AboutResponse
-
-        # SERVICES
-        getServices: ServicesResponse
-
-        # FAQs
-        getFAQs: MultiFAQsResponse
+        # CMS
+        getAllCmsContent: CmsResponse
     }
 
     input ServiceOfferingFields {
@@ -153,6 +178,101 @@ const typeDefs = gql`
         title: String
         description: String
         bullets: [String]
+    }
+
+    input InputCallToActionFields {
+        image: String
+        heading: String
+        description: String
+        buttonLabel: String
+    }
+
+    input InputAboutFields {
+        profilePic: String
+        backgroundInfo: String
+        role: String
+        title: String
+        header: String
+        subHeader: String
+        heroImage: String
+    }
+
+    input InputContactLinks {
+        icon: String
+        link: String
+        title: String
+    }
+
+    input InputFooterFields {
+        contactLinks: [InputContactLinks]
+    }
+
+    input InputServiceOfferings {
+        icon: String
+        title: String
+        description: String
+        bullets: [String]
+    }
+
+    input InputServicesFields {
+        pageH1: String
+        pageH2: String
+        description: String
+        heroImage: String
+        offerings: [InputServiceOfferings]
+    }
+
+    input InputFAQFields {
+        question: String
+        answer: String
+    }
+
+    input InputFAQContent {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+    }
+
+    input InputFAQItems {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        qAndA: [InputFAQFields]
+    }
+
+    input InputBlogItem {
+        thumbnail: String
+        image: String
+        title: String
+        recap: String
+        content: [String]
+    }
+
+    input InputBlogContent {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+    }
+
+    input InputBlogFields {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        blogs: [InputBlogItem]
+    }
+
+    input InputLandingFields {
+        heroImage: String
+        heroBannerH1: String
+        heroBannerH2: String
+        subtext: String
+    }
+
+    input InputServiceContentFields {
+        pageH1: String
+        pageH2: String
+        description: String
+        heroImage: String
     }
 
     type Mutation {
@@ -164,14 +284,6 @@ const typeDefs = gql`
             lastName: String!
         ): UserResponse
         login(email: String!, password: String!): UserResponse
-        updateUser(
-            address: String
-            role: String
-            background: String
-            contactLinks: [ContactLinkInput]
-            callToAction: CallToActionInput
-            profileImg: String
-        ): UserResponse
         updatePassword(
             email: String!
             newPassword: String!
@@ -180,27 +292,45 @@ const typeDefs = gql`
         deleteUser(id: String!): MultiUserResponse
         sendPasswordResetEmail(email: String!): UserResponse
 
-        # ABOUT
-        createAboutItem(description: [String]!): AboutResponse
-        editAboutItem(_id: ID!, updated: [String]!): AboutResponse
-
-        # SERVICES
-        editServices(
-            _id: ID!
-            pageH1: String
-            pageH2: String
-            description: String
-            offerings: [ServiceOfferingFields]
-        ): ServicesResponse
-
-        # FAQs
-        createFAQItem(question: String!, answer: String!): MultiFAQsResponse
-        editFAQItem(
-            _id: ID!
-            question: String
-            answer: String
-        ): MultiFAQsResponse
-        deleteFAQItem(_id: ID!): MultiFAQsResponse
+        # CMS
+        createCmsContent(
+            callToAction: InputCallToActionFields
+            about: InputAboutFields
+            footer: InputFooterFields
+            services: InputServicesFields
+            faqs: InputFAQItems
+            blog: InputBlogFields
+            landing: InputLandingFields
+        ): CmsResponse
+        editCallToAction(
+            input: InputCallToActionFields
+            cmsID: ID!
+        ): CmsResponse
+        editLanding(input: InputLandingFields, cmsID: ID!): CmsResponse
+        editAbout(input: InputAboutFields, cmsID: ID!): CmsResponse
+        editFooter(input: InputFooterFields, cmsID: ID!): CmsResponse
+        editServiceContent(
+            input: InputServiceContentFields
+            cmsID: ID!
+        ): CmsResponse
+        createServiceOffering(
+            input: InputServiceOfferings
+            cmsID: ID!
+        ): CmsResponse
+        editServiceOffering(
+            input: InputServiceOfferings
+            offeringID: ID!
+            cmsID: ID!
+        ): CmsResponse
+        deleteServiceOffering(offeringID: ID!, cmsID: ID!): CmsResponse
+        createFaqItem(input: InputFAQFields, cmsID: ID!): CmsResponse
+        editFaqItem(input: InputFAQFields, faqID: ID!, cmsID: ID!): CmsResponse
+        deleteFaqItem(faqID: ID!, cmsID: ID!): CmsResponse
+        editFaqContent(input: InputFAQContent, cmsID: ID!): CmsResponse
+        createBlogItem(input: InputBlogItem, cmsID: ID!): CmsResponse
+        editBlogItem(input: InputBlogItem, blogID: ID!, cmsID: ID!): CmsResponse
+        deleteBlogItem(blogID: ID!, cmsID: ID!): CmsResponse
+        editBlogContent(input: InputBlogContent, cmsID: ID!): CmsResponse
     }
 `
 

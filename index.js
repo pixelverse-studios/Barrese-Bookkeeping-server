@@ -32,7 +32,7 @@ module.exports.dateScalar = dateScalar
 
 const PORT = process.env.PORT || 5001
 const MONGO_URI = process.env.MONGODB ?? ''
-
+mongoose.set('strictQuery', false)
 mongoose
     .connect(MONGO_URI)
     .then(() => console.log('MongoDB connected.'))

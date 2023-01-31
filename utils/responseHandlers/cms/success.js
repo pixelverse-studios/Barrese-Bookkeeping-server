@@ -1,28 +1,20 @@
+const SINLGE_RESPONSE = 'CmsFields'
+
 const baseArrayResponse = ({ data, __typename, key }) => ({
     __typename,
     [key]: data
 })
 
-const baseResponse = ({ data, __typename }) => {
+const baseResponse = data => {
     const response = {
-        __typename,
+        __typename: SINLGE_RESPONSE,
         ...data._doc
     }
 
     return response
 }
 
-const routeForResponseType = (data, typename, key) => {
-    if (typename.includes('Multi')) {
-        return baseArrayResponse({ data, __typename: typename, key })
-    }
-
-    return baseResponse({ data, __typename: typename })
-}
-
 module.exports = {
-    cmsUpdated: (data, typename, key) =>
-        routeForResponseType(data, typename, key),
-    cmsItemFetched: (data, typename, key) =>
-        routeForResponseType(data, typename, key)
+    edited: data => baseResponse(data),
+    contentFetched: data => baseResponse(data)
 }

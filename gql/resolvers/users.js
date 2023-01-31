@@ -77,27 +77,6 @@ module.exports.UserMutations = {
             return new Error(error)
         }
     },
-    async updateUser(_, data, context) {
-        const token = validateToken(context)
-        if (!token || !isTokenExpired(token.exp)) {
-            return buildResponse.user.errors.invalidToken()
-        }
-
-        try {
-            const userToUpdate = await User.findOne({ email: token.user.email })
-            for (const [key, value] of Object.entries(data)) {
-                if (value) {
-                    userToUpdate[key] = value
-                }
-            }
-            const updatedUser = await userToUpdate.save()
-            const newToken = generateToken(updatedUser)
-            return buildResponse.user.success.loggedIn(updatedUser, newToken)
-        } catch (error) {
-            console.log(error)
-            throw new Error(error)
-        }
-    },
     async sendPasswordResetEmail(_, { email }) {
         try {
             if (!email) {
