@@ -4,22 +4,26 @@ const cmsSchema = new Schema({
     callToAction: {
         image: String,
         heading: String,
-        description: String
+        description: String,
+        buttonLabel: String
     },
     about: {
         profilePic: String,
         backgroundInfo: String,
         role: String,
-        title: String
+        title: String,
+        header: String,
+        subHeader: String,
+        heroImage: String
     },
     footer: {
-        contactLinks: [{ icon: String, link: String, title: String }],
-        description: String
+        contactLinks: [{ icon: String, link: String, title: String }]
     },
     services: {
         pageH1: String,
         pageH2: String,
         description: String,
+        heroImage: String,
         offerings: [
             {
                 icon: String,
@@ -29,16 +33,32 @@ const cmsSchema = new Schema({
             }
         ]
     },
-    faqs: [{ question: String, answer: String }],
-    blog: [
-        {
-            thumbnail: String,
-            image: String,
-            title: String,
-            recap: String,
-            createdAt: { type: Date, default: Date.now }
-        }
-    ]
+    faqs: {
+        pageH1: String,
+        pageH2: String,
+        heroImage: String,
+        qAndA: [{ question: String, answer: String }]
+    },
+    blog: {
+        pageH1: String,
+        pageH2: String,
+        heroImage: String,
+        blogs: [
+            {
+                thumbnail: String,
+                image: String,
+                title: String,
+                recap: String,
+                createdAt: { type: Date, default: Date.now }
+            }
+        ]
+    },
+    landing: {
+        heroImage: String,
+        heroBannerH1: String,
+        heroBannerH2: String,
+        subtext: String
+    }
 })
 
 module.exports = model('CMS', cmsSchema)

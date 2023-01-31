@@ -64,6 +64,7 @@ const typeDefs = gql`
         image: String
         heading: String
         description: String
+        buttonLabel: String
     }
 
     type AboutFields {
@@ -71,6 +72,9 @@ const typeDefs = gql`
         backgroundInfo: String
         role: String
         title: String
+        header: String
+        subHeader: String
+        heroImage: String
     }
 
     type ContactLinks {
@@ -82,7 +86,6 @@ const typeDefs = gql`
 
     type FooterFields {
         contactLinks: [ContactLinks]
-        description: String
     }
 
     type ServiceOfferings {
@@ -97,16 +100,24 @@ const typeDefs = gql`
         pageH1: String
         pageH2: String
         description: String
+        heroImage: String
         offerings: [ServiceOfferings]
     }
 
-    type FAQFields {
+    type FAQs {
         _id: ID!
         question: String
         answer: String
     }
 
-    type BlogFields {
+    type FAQFields {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        qAndA: [FAQs]
+    }
+
+    type BlogItem {
         _id: ID!
         thumbnail: String
         image: String
@@ -115,29 +126,39 @@ const typeDefs = gql`
         createdAt: Date
     }
 
+    type BlogFields {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        blogs: [BlogItem]
+    }
+
+    type LandingFields {
+        heroImage: String
+        heroBannerH1: String
+        heroBannerH2: String
+        subtext: String
+    }
+
     type CmsFields {
         _id: ID!
         callToAction: CallToActionFields
         about: AboutFields
         footer: FooterFields
         services: ServicesFields
-        faqs: [FAQFields]
-        blog: [BlogFields]
+        faqs: FAQFields
+        blog: BlogFields
+        landing: LandingFields
     }
 
     union CmsResponse = CmsFields | Errors
 
     # Inputs
-    input ContactLinkInput {
-        icon: String
-        url: String
-        title: String
-    }
-
     input CallToActionInput {
         thumbnail: String
         emphasized: String
         description: String
+        buttonLabel: String
     }
 
     type Query {
@@ -161,6 +182,7 @@ const typeDefs = gql`
         image: String
         heading: String
         description: String
+        buttonLabel: String
     }
 
     input InputAboutFields {
@@ -168,6 +190,9 @@ const typeDefs = gql`
         backgroundInfo: String
         role: String
         title: String
+        header: String
+        subHeader: String
+        heroImage: String
     }
 
     input InputContactLinks {
@@ -178,7 +203,6 @@ const typeDefs = gql`
 
     input InputFooterFields {
         contactLinks: [InputContactLinks]
-        description: String
     }
 
     input InputServiceOfferings {
@@ -192,6 +216,7 @@ const typeDefs = gql`
         pageH1: String
         pageH2: String
         description: String
+        heroImage: String
         offerings: [InputServiceOfferings]
     }
 
@@ -200,21 +225,43 @@ const typeDefs = gql`
         answer: String
     }
 
-    input InputBlogFields {
+    input InputFAQItems {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        qAndA: [InputFAQFields]
+    }
+
+    input InputBlogItem {
         thumbnail: String
         image: String
         title: String
         recap: String
     }
 
-    input InputCmsFields {
-        callToAction: InputCallToActionFields
-        about: InputAboutFields
-        footer: InputFooterFields
-        services: InputServicesFields
-        faqs: [InputFAQFields]
-        blog: [InputBlogFields]
+    input InputBlogFields {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+        blogs: [InputBlogItem]
     }
+
+    input InputLandingFields {
+        heroImage: String
+        heroBannerH1: String
+        heroBannerH2: String
+        subtext: String
+    }
+
+    # input InputCmsFields {
+    #     callToAction: InputCallToActionFields
+    #     about: InputAboutFields
+    #     footer: InputFooterFields
+    #     services: InputServicesFields
+    #     faqs: [InputFAQItem]
+    #     blog: [InputBlogFields]
+    #     landing: InputLandingFields
+    # }
 
     input InputServiceContentFields {
         pageH1: String
@@ -245,8 +292,9 @@ const typeDefs = gql`
             about: InputAboutFields
             footer: InputFooterFields
             services: InputServicesFields
-            faqs: InputFAQFields
+            faqs: InputFAQItems
             blog: InputBlogFields
+            landing: InputLandingFields
         ): CmsResponse
         editCallToAction(
             input: InputCallToActionFields
@@ -268,10 +316,11 @@ const typeDefs = gql`
             cmsID: ID!
         ): CmsResponse
         deleteServiceOffering(offeringID: ID!, cmsID: ID!): CmsResponse
-        createFaq(input: InputFAQFields, cmsID: ID!): CmsResponse
-        editFaq(input: InputFAQFields, faqID: ID!, cmsID: ID!): CmsResponse
+        createFaq(input: InputFAQItems, cmsID: ID!): CmsResponse
+        editFaq(input: InputFAQItems, faqID: ID!, cmsID: ID!): CmsResponse
         deleteFaq(faqID: ID!, cmsID: ID!): CmsResponse
         createBlog(input: InputBlogFields, cmsID: ID!): CmsResponse
+        editBlog(input: InputBlogFields, blogID: ID!, cmsID: ID!): CmsResponse
         deleteBlog(faqID: ID!, cmsID: ID!): CmsResponse
     }
 `
