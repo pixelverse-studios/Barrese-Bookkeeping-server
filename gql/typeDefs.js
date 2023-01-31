@@ -17,7 +17,8 @@ const typeDefs = gql`
 
         # CMS
         cmsItemNotFound
-        noValidFieldsReceived
+        minimumValidFieldsMissing
+        allValidFieldsMissing
 
         # GENERAL
         fetched
@@ -225,6 +226,12 @@ const typeDefs = gql`
         answer: String
     }
 
+    input InputFAQContent {
+        pageH1: String
+        pageH2: String
+        heroImage: String
+    }
+
     input InputFAQItems {
         pageH1: String
         pageH2: String
@@ -253,20 +260,11 @@ const typeDefs = gql`
         subtext: String
     }
 
-    # input InputCmsFields {
-    #     callToAction: InputCallToActionFields
-    #     about: InputAboutFields
-    #     footer: InputFooterFields
-    #     services: InputServicesFields
-    #     faqs: [InputFAQItem]
-    #     blog: [InputBlogFields]
-    #     landing: InputLandingFields
-    # }
-
     input InputServiceContentFields {
         pageH1: String
         pageH2: String
         description: String
+        heroImage: String
     }
 
     type Mutation {
@@ -300,6 +298,7 @@ const typeDefs = gql`
             input: InputCallToActionFields
             cmsID: ID!
         ): CmsResponse
+        editLanding(input: InputLandingFields, cmsID: ID!): CmsResponse
         editAbout(input: InputAboutFields, cmsID: ID!): CmsResponse
         editFooter(input: InputFooterFields, cmsID: ID!): CmsResponse
         editServiceContent(
@@ -316,9 +315,10 @@ const typeDefs = gql`
             cmsID: ID!
         ): CmsResponse
         deleteServiceOffering(offeringID: ID!, cmsID: ID!): CmsResponse
-        createFaq(input: InputFAQItems, cmsID: ID!): CmsResponse
-        editFaq(input: InputFAQItems, faqID: ID!, cmsID: ID!): CmsResponse
-        deleteFaq(faqID: ID!, cmsID: ID!): CmsResponse
+        createFaqItem(input: InputFAQFields, cmsID: ID!): CmsResponse
+        editFaqItem(input: InputFAQFields, faqID: ID!, cmsID: ID!): CmsResponse
+        deleteFaqItem(faqID: ID!, cmsID: ID!): CmsResponse
+        editFaqContent(input: InputFAQContent, cmsID: ID!): CmsResponse
         createBlog(input: InputBlogFields, cmsID: ID!): CmsResponse
         editBlog(input: InputBlogFields, blogID: ID!, cmsID: ID!): CmsResponse
         deleteBlog(faqID: ID!, cmsID: ID!): CmsResponse
