@@ -17,13 +17,16 @@ const typeDefs = gql`
 
         # CMS
         cmsItemNotFound
-        minimumValidFieldsMissing
-        allValidFieldsMissing
+        someFieldsRequired
+        allFieldsRequired
 
         # GENERAL
         fetched
 
         # NEWSLETTER
+        userExistsInNewsletter
+        userNotInNewsletter
+        noDataFound
     }
 
     type UserFields {
@@ -64,7 +67,7 @@ const typeDefs = gql`
 
     # NEWSLETTER
     type NewsletterUserFields {
-        _id: ID!
+        _id: ID
         email: String!
         firstName: String
         lastName: String
@@ -72,16 +75,27 @@ const typeDefs = gql`
         updatedAt: Date
         subscribed: Boolean
     }
-    union NewsletterUserResponse = NewsletterUserFields | Errors
+
+    type NewsletterUserSuccess {
+        users: [NewsletterUserFields]
+    }
+    union NewsletterUserSingleResponse = NewsletterUserFields | Errors
+    union NewsletterUserMultiResponse = NewsletterUserSuccess | Errors
 
     type NewsletterRecordsFields {
-        _id: ID!
+        _id: ID
         participants: [String]
         emailBody: [String]
         subjectLine: String
         sentAt: Date
     }
-    union NewsletterRecordsResponse = NewsletterRecordsFields | Errors
+
+    type NewsletterRecordsSuccess {
+        users: [NewsletterRecordsFields]
+    }
+
+    union NewsletterRecordsSingleResponse = NewsletterRecordsFields | Errors
+    union NewsletterRecordsMultiResponse = NewsletterRecordsSuccess | Errors
 
     # CMS
     type CallToActionFields {
@@ -196,11 +210,11 @@ const typeDefs = gql`
         getAllCmsContent: CmsResponse
 
         # NEWSLETTER USERS
-        getSubscribedUsers: NewsletterUserResponse
-        getAllNewsletterUsers: NewsletterUserResponse
+        getSubscribedUsers: NewsletterUserMultiResponse
+        getAllNewsletterUsers: NewsletterUserMultiResponse
 
         # NEWSLETTER RECORDS
-        getAllNewsletterRecords: NewsletterRecordsResponse
+        getAllNewsletterRecords: NewsletterRecordsMultiResponse
     }
 
     input ServiceOfferingFields {
@@ -367,17 +381,17 @@ const typeDefs = gql`
             email: String!
             firstName: String!
             lastName: String!
-        ): NewsletterUserResponse
+        ): NewsletterUserSingleResponse
         updateSubscriptionStatus(
             email: String!
             subscribed: Boolean!
-        ): NewsletterUserResponse
+        ): NewsletterUserSingleResponse
 
         # NEWSLETTER RECORDS
         dispatchNewsletter(
             emailBody: [String]!
             subjectLine: String!
-        ): NewsletterRecordsResponse
+        ): NewsletterRecordsSingleResponse
     }
 `
 

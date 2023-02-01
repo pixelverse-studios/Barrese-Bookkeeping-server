@@ -45,7 +45,7 @@ module.exports.CmsMutations = {
 
             const isValid = Object.values(input).some(val => val)
             if (!isValid) {
-                return buildResponse.cms.errors.minimumValidFieldsMissing(
+                return buildResponse.input.errors.someFieldsRequired(
                     'Image, Heading, Description, Button Label',
                     'Call To Action'
                 )
@@ -71,7 +71,7 @@ module.exports.CmsMutations = {
 
         const isValid = Object.values(input).some(value => value)
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Hero Image, Banner, Secondary Banner,Subtext',
                 'Landing'
             )
@@ -97,7 +97,7 @@ module.exports.CmsMutations = {
 
         const isValid = Object.values(input).some(value => value)
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Profile Picture, Background Info, Role, Title, Hero Image',
                 'About'
             )
@@ -123,7 +123,7 @@ module.exports.CmsMutations = {
 
         const isValid = input.contactLinks?.length
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Contact Links',
                 'Footer'
             )
@@ -147,7 +147,7 @@ module.exports.CmsMutations = {
 
         const isValid = Object.values(input).some(value => !value)
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Primary Page Header, Secondary Page Header, Description, Hero Image',
                 'Services Info'
             )
@@ -175,7 +175,7 @@ module.exports.CmsMutations = {
             }
         })
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Icon, Title, Description, Bullet Points',
                 'Services Offering'
             )
@@ -204,7 +204,7 @@ module.exports.CmsMutations = {
             }
         })
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Icon, Title, Description, Bullet Points',
                 'Services Offering'
             )
@@ -263,7 +263,7 @@ module.exports.CmsMutations = {
 
         const isValid = !!input.question && !!input.answer
         if (!isValid) {
-            return buildResponse.cms.errors.allValidFieldsMissing(
+            return buildResponse.input.errors.allFieldsRequired(
                 'Question, Answer',
                 'Creating FAQ item'
             )
@@ -286,7 +286,7 @@ module.exports.CmsMutations = {
 
         const isValid = !!input.question || !!input.answer
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Question, Answer',
                 'Editing FAQ Item'
             )
@@ -337,7 +337,7 @@ module.exports.CmsMutations = {
 
         const isValid = Object.values(input).some(value => value)
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Hero Image, Page Primary Header, Page Secondary Header',
                 'FAQ Content'
             )
@@ -369,7 +369,7 @@ module.exports.CmsMutations = {
             }
         })
         if (!isValid) {
-            return buildResponse.cms.errors.allValidFieldsMissing(
+            return buildResponse.input.errors.allFieldsRequired(
                 'Thumbnail, Image, Title, Recap, Content',
                 'Creating a new Blog'
             )
@@ -399,7 +399,7 @@ module.exports.CmsMutations = {
             }
         })
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Thumbnail, Image, Title, Recap, Content',
                 'Editing a Blog'
             )
@@ -450,7 +450,7 @@ module.exports.CmsMutations = {
 
         const isValid = Object.values(input).some(value => value)
         if (!isValid) {
-            return buildResponse.cms.errors.minimumValidFieldsMissing(
+            return buildResponse.input.errors.someFieldsRequired(
                 'Hero Image, Page Primary Header, Page Secondary Header',
                 'editing Blog Content'
             )
