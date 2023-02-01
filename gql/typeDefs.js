@@ -22,6 +22,8 @@ const typeDefs = gql`
 
         # GENERAL
         fetched
+
+        # NEWSLETTER
     }
 
     type UserFields {
@@ -59,6 +61,27 @@ const typeDefs = gql`
 
     union UserResponse = UserSuccess | Errors
     union MultiUserResponse = MultiUsersSuccess | Errors
+
+    # NEWSLETTER
+    type NewsletterUserFields {
+        _id: ID!
+        email: String!
+        firstName: String
+        lastName: String
+        createdAt: Date
+        updatedAt: Date
+        subscribed: Boolean
+    }
+    union NewsletterUserResponse = NewsletterUserFields | Errors
+
+    type NewsletterRecordsFields {
+        _id: ID!
+        participants: [String]
+        emailBody: [String]
+        subjectLine: String
+        sentAt: Date
+    }
+    union NewsletterRecordsResponse = NewsletterRecordsFields | Errors
 
     # CMS
     type CallToActionFields {
@@ -171,6 +194,13 @@ const typeDefs = gql`
 
         # CMS
         getAllCmsContent: CmsResponse
+
+        # NEWSLETTER USERS
+        getSubscribedUsers: NewsletterUserResponse
+        getAllNewsletterUsers: NewsletterUserResponse
+
+        # NEWSLETTER RECORDS
+        getAllNewsletterRecords: NewsletterRecordsResponse
     }
 
     input ServiceOfferingFields {
@@ -331,6 +361,23 @@ const typeDefs = gql`
         editBlogItem(input: InputBlogItem, blogID: ID!, cmsID: ID!): CmsResponse
         deleteBlogItem(blogID: ID!, cmsID: ID!): CmsResponse
         editBlogContent(input: InputBlogContent, cmsID: ID!): CmsResponse
+
+        # NEWSLETTER USERS
+        addUserToNewsletter(
+            email: String!
+            firstName: String!
+            lastName: String!
+        ): NewsletterUserResponse
+        updateSubscriptionStatus(
+            email: String!
+            subscribed: Boolean!
+        ): NewsletterUserResponse
+
+        # NEWSLETTER RECORDS
+        dispatchNewsletter(
+            emailBody: [String]!
+            subjectLine: String!
+        ): NewsletterRecordsResponse
     }
 `
 
