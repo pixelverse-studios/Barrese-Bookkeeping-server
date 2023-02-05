@@ -2,6 +2,18 @@ const NewsletterUsers = require('../../../models/NewsletterUsers')
 const { validateToken } = require('../../../utils/token')
 const buildResponse = require('../../../utils/responseHandlers')
 
+const getSubscribedParticipants = async () => {
+    try {
+        return await NewsletterUsers.find({
+            subscribed: true
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
+module.exports.getSubscribedParticipants = getSubscribedParticipants
+
 module.exports.NewsletterUserMutations = {
     async addUserToNewsletter(_, input, context) {
         const token = validateToken(context)
@@ -63,9 +75,7 @@ module.exports.NewsletterUserMutations = {
 module.exports.NewsletterUserQueries = {
     async getSubscribedUsers() {
         try {
-            const subscribedUsers = await NewsletterUsers.find({
-                subscribed: true
-            })
+            const subscribedUsers = await getSubscribedParticipants()
             return buildResponse.newsletter.success.usersFetched(
                 subscribedUsers
             )

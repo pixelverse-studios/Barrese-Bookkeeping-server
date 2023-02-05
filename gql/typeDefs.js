@@ -82,16 +82,22 @@ const typeDefs = gql`
     union NewsletterUserSingleResponse = NewsletterUserFields | Errors
     union NewsletterUserMultiResponse = NewsletterUserSuccess | Errors
 
+    type NewsletterParticipants {
+        email: String
+        firstName: String
+        lastName: String
+    }
+
     type NewsletterRecordsFields {
         _id: ID
-        participants: [String]
+        participants: [NewsletterParticipants]
         emailBody: [String]
         subjectLine: String
         sentAt: Date
     }
 
     type NewsletterRecordsSuccess {
-        users: [NewsletterRecordsFields]
+        records: [NewsletterRecordsFields]
     }
 
     union NewsletterRecordsSingleResponse = NewsletterRecordsFields | Errors

@@ -7,7 +7,7 @@ const {
 const {
     NewsletterRecordsMutations,
     NewsletterRecordsQueries
-} = require('./newsletter/users')
+} = require('./newsletter/records')
 
 const Query = {
     ...UserQueries,

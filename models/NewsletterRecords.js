@@ -1,7 +1,13 @@
 const { model, Schema } = require('mongoose')
 
 const newsletterRecordsSchema = new Schema({
-    participants: [String],
+    participants: [
+        {
+            email: String,
+            firstName: String,
+            lastName: String
+        }
+    ],
     emailBody: [String],
     subjectLine: String,
     sentAt: { type: Date, default: Date.now }
