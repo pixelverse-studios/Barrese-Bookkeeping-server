@@ -17,11 +17,16 @@ const typeDefs = gql`
 
         # CMS
         cmsItemNotFound
-        minimumValidFieldsMissing
-        allValidFieldsMissing
+        someFieldsRequired
+        allFieldsRequired
 
         # GENERAL
         fetched
+
+        # NEWSLETTER
+        userExistsInNewsletter
+        userNotInNewsletter
+        noDataFound
     }
 
     type UserFields {
@@ -59,6 +64,44 @@ const typeDefs = gql`
 
     union UserResponse = UserSuccess | Errors
     union MultiUserResponse = MultiUsersSuccess | Errors
+
+    # NEWSLETTER
+    type NewsletterUserFields {
+        _id: ID
+        email: String!
+        firstName: String
+        lastName: String
+        createdAt: Date
+        updatedAt: Date
+        subscribed: Boolean
+    }
+
+    type NewsletterUserSuccess {
+        users: [NewsletterUserFields]
+    }
+    union NewsletterUserSingleResponse = NewsletterUserFields | Errors
+    union NewsletterUserMultiResponse = NewsletterUserSuccess | Errors
+
+    type NewsletterParticipants {
+        email: String
+        firstName: String
+        lastName: String
+    }
+
+    type NewsletterRecordsFields {
+        _id: ID
+        participants: [NewsletterParticipants]
+        emailBody: [String]
+        subjectLine: String
+        sentAt: Date
+    }
+
+    type NewsletterRecordsSuccess {
+        records: [NewsletterRecordsFields]
+    }
+
+    union NewsletterRecordsSingleResponse = NewsletterRecordsFields | Errors
+    union NewsletterRecordsMultiResponse = NewsletterRecordsSuccess | Errors
 
     # CMS
     type CallToActionFields {
@@ -171,6 +214,13 @@ const typeDefs = gql`
 
         # CMS
         getAllCmsContent: CmsResponse
+
+        # NEWSLETTER USERS
+        getSubscribedUsers: NewsletterUserMultiResponse
+        getAllNewsletterUsers: NewsletterUserMultiResponse
+
+        # NEWSLETTER RECORDS
+        getAllNewsletterRecords: NewsletterRecordsMultiResponse
     }
 
     input ServiceOfferingFields {
@@ -331,6 +381,23 @@ const typeDefs = gql`
         editBlogItem(input: InputBlogItem, blogID: ID!, cmsID: ID!): CmsResponse
         deleteBlogItem(blogID: ID!, cmsID: ID!): CmsResponse
         editBlogContent(input: InputBlogContent, cmsID: ID!): CmsResponse
+
+        # NEWSLETTER USERS
+        addUserToNewsletter(
+            email: String!
+            firstName: String!
+            lastName: String!
+        ): NewsletterUserSingleResponse
+        updateSubscriptionStatus(
+            email: String!
+            subscribed: Boolean!
+        ): NewsletterUserSingleResponse
+
+        # NEWSLETTER RECORDS
+        dispatchNewsletter(
+            emailBody: [String]!
+            subjectLine: String!
+        ): NewsletterRecordsSingleResponse
     }
 `
 

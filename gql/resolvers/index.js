@@ -1,12 +1,24 @@
 const { UserQueries, UserMutations } = require('./users')
 const { CmsQueries, CmsMutations } = require('./cms')
+const {
+    NewsletterUserQueries,
+    NewsletterUserMutations
+} = require('./newsletter/users')
+const {
+    NewsletterRecordsMutations,
+    NewsletterRecordsQueries
+} = require('./newsletter/records')
 
 const Query = {
     ...UserQueries,
-    ...CmsQueries
+    ...CmsQueries,
+    ...NewsletterUserQueries,
+    ...NewsletterRecordsQueries
 }
 const Mutation = {
     ...UserMutations,
-    ...CmsMutations
+    ...CmsMutations,
+    ...NewsletterUserMutations,
+    ...NewsletterRecordsMutations
 }
 module.exports = { Query, Mutation }
