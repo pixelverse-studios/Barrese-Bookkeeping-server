@@ -63,7 +63,7 @@ module.exports.UserMutations = {
                 return buildResponse.form.user.errors.userNotFound()
             }
 
-            const match = bcrypt.compare(password, user.password)
+            const match = await bcrypt.compare(password, user.password)
             if (!match) {
                 return buildResponse.user.errors.invalidCredentials()
             }
@@ -96,8 +96,9 @@ module.exports.UserMutations = {
             throw new Error(error)
         }
     },
-    async updatePassword(_, { email, newPassword, token }) {
+    async updatePassword(_, { newPassword, token }) {
         const decoded = jwt_decode(token)
+
         if (!token || !isTokenExpired(decoded.exp)) {
             return buildResponse.user.errors.invalidToken()
         }
@@ -109,7 +110,7 @@ module.exports.UserMutations = {
         }
 
         try {
-            const sanitizedEmail = email.toLowerCase()
+            const sanitizedEmail = decoded.email.toLowerCase()
             const user = await User.findOne({ email: sanitizedEmail })
 
             if (!user) {
