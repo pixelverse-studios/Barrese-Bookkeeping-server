@@ -479,7 +479,7 @@ module.exports.CmsQueries = {
 
             const routePrefix = '/dashboard'
             const dashboardRoutes = [
-                { label: 'User Profile', route: `${routePrefix}/user` },
+                { label: 'User Profile', route: `${routePrefix}` },
                 { label: 'Landing Page', route: `${routePrefix}/landing` },
                 {
                     label: 'Call To Action',
