@@ -185,6 +185,16 @@ const typeDefs = gql`
         subtext: String
     }
 
+    type DashboardFields {
+        route: String
+        label: String
+    }
+
+    type NewsletterCmsFields {
+        users: [NewsletterUserFields]
+        records: [NewsletterRecordsFields]
+    }
+
     type CmsFields {
         _id: ID!
         landing: LandingFields
@@ -194,6 +204,8 @@ const typeDefs = gql`
         services: ServicesFields
         faqs: FAQFields
         blog: BlogFields
+        dashboard: [DashboardFields]
+        newsletter: NewsletterCmsFields
     }
 
     union CmsResponse = CmsFields | Errors
@@ -334,11 +346,7 @@ const typeDefs = gql`
             lastName: String!
         ): UserResponse
         login(email: String!, password: String!): UserResponse
-        updatePassword(
-            email: String!
-            newPassword: String!
-            token: String!
-        ): UserResponse
+        updatePassword(newPassword: String!, token: String!): UserResponse
         deleteUser(id: String!): MultiUserResponse
         sendPasswordResetEmail(email: String!): UserResponse
 

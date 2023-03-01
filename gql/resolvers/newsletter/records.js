@@ -4,6 +4,15 @@ const buildResponse = require('../../../utils/responseHandlers')
 const { getSubscribedParticipants } = require('./users')
 const { sendGeneralNewsletter } = require('../../../utils/mailer/newsletter')
 
+const getAllNewsletterRecords = async () => {
+    try {
+        return await NewsletterRecords.find()
+    } catch (error) {
+        throw error
+    }
+}
+
+module.exports.getAllNewsletterRecords = getAllNewsletterRecords
 module.exports.NewsletterRecordsMutations = {
     async dispatchNewsletter(_, { emailBody, subjectLine }, context) {
         try {
@@ -38,7 +47,7 @@ module.exports.NewsletterRecordsMutations = {
 module.exports.NewsletterRecordsQueries = {
     async getAllNewsletterRecords() {
         try {
-            const allRecords = await NewsletterRecords.find()
+            const allRecords = await getAllNewsletterRecords()
             if (!allRecords.length) {
                 return buildResponse.newsletter.errors.noDataFound(
                     'Newsletter Records'

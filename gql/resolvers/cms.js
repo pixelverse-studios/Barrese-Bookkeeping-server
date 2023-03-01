@@ -1,6 +1,8 @@
 const CMS = require('../../models/CMS')
 const { validateToken } = require('../../utils/token')
 const buildResponse = require('../../utils/responseHandlers')
+const { getAllParticipants } = require('./newsletter/users')
+const { getAllNewsletterRecords } = require('./newsletter/records')
 
 const getCms = async _id => {
     try {
@@ -475,7 +477,35 @@ module.exports.CmsQueries = {
         try {
             const content = await CMS.find()
 
-            return buildResponse.cms.success.contentFetched(content[0])
+            const routePrefix = '/dashboard'
+            const dashboardRoutes = [
+                { label: 'User Profile', route: `${routePrefix}` },
+                { label: 'Landing Page', route: `${routePrefix}/landing` },
+                {
+                    label: 'Call To Action',
+                    route: `${routePrefix}/calltoaction`
+                },
+                { label: 'About Page', route: `${routePrefix}/about` },
+                { label: 'Footer', route: `${routePrefix}/footer` },
+                { label: 'Services Page', route: `${routePrefix}/services` },
+                { label: 'FAQs Page', route: `${routePrefix}/faqs` },
+                {
+                    label: 'Newsletter Users',
+                    route: `${routePrefix}/newsletter-users`
+                },
+                {
+                    label: 'Newsletter Records',
+                    route: `${routePrefix}/newsletter-records`
+                }
+            ]
+
+            const users = await getAllParticipants()
+            const records = await getAllNewsletterRecords()
+
+            const cmsData = content[0]
+            cmsData._doc.dashboard = dashboardRoutes
+            cmsData._doc.newsletter = { users, records }
+            return buildResponse.cms.success.contentFetched(cmsData)
         } catch (error) {
             throw error
         }
