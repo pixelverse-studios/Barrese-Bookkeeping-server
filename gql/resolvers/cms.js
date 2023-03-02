@@ -4,6 +4,40 @@ const buildResponse = require('../../utils/responseHandlers')
 const { getAllParticipants } = require('./newsletter/users')
 const { getAllNewsletterRecords } = require('./newsletter/records')
 
+const buildCmsResponse = async cms => {
+    const updatedCms = { ...cms }
+
+    const routePrefix = '/dashboard'
+    const dashboardRoutes = [
+        { label: 'User Profile', route: `${routePrefix}` },
+        { label: 'Landing Page', route: `${routePrefix}/landing` },
+        {
+            label: 'Call To Action',
+            route: `${routePrefix}/calltoaction`
+        },
+        { label: 'About Page', route: `${routePrefix}/about` },
+        { label: 'Footer', route: `${routePrefix}/footer` },
+        { label: 'Services Page', route: `${routePrefix}/services` },
+        { label: 'FAQs Page', route: `${routePrefix}/faqs` },
+        {
+            label: 'Newsletter Users',
+            route: `${routePrefix}/newsletter-users`
+        },
+        {
+            label: 'Newsletter Records',
+            route: `${routePrefix}/newsletter-records`
+        }
+    ]
+
+    const users = await getAllParticipants()
+    const records = await getAllNewsletterRecords()
+
+    updatedCms._doc.dashboard = dashboardRoutes
+    updatedCms._doc.newsletter = { users, records }
+
+    return updatedCms
+}
+
 const getCms = async _id => {
     try {
         const cms = await CMS.findById({ _id })
@@ -60,7 +94,8 @@ module.exports.CmsMutations = {
             }
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -86,7 +121,8 @@ module.exports.CmsMutations = {
             }
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -112,7 +148,8 @@ module.exports.CmsMutations = {
             }
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -136,7 +173,8 @@ module.exports.CmsMutations = {
             cms.footer.contactLinks = input.contactLinks
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -161,7 +199,8 @@ module.exports.CmsMutations = {
         }
 
         const updated = await cms.save()
-        return buildResponse.cms.success.edited(updated)
+        const cmsData = await buildCmsResponse(updated)
+        return buildResponse.cms.success.edited(cmsData)
     },
     async createServiceOffering(_, { input, cmsID }, context) {
         const token = validateToken(context)
@@ -188,7 +227,8 @@ module.exports.CmsMutations = {
             cms.services.offerings.push(input)
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -229,7 +269,8 @@ module.exports.CmsMutations = {
                 : cms.services.offerings.id(offeringID).bullets
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -252,7 +293,8 @@ module.exports.CmsMutations = {
 
             offeringToDelete.remove()
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -275,7 +317,8 @@ module.exports.CmsMutations = {
             const cms = await getCms(cmsID)
             cms.faqs.qAndA.push(input)
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -303,7 +346,8 @@ module.exports.CmsMutations = {
             faqToEdit.answer = input.answer ? input.answer : faqToEdit.answer
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -326,7 +370,8 @@ module.exports.CmsMutations = {
 
             faqToDelete.remove()
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -352,7 +397,8 @@ module.exports.CmsMutations = {
             }
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -382,7 +428,8 @@ module.exports.CmsMutations = {
             cms.blog.blogs.push(input)
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -418,7 +465,8 @@ module.exports.CmsMutations = {
             )
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -439,7 +487,8 @@ module.exports.CmsMutations = {
 
             blogToDelete.remove()
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -465,7 +514,8 @@ module.exports.CmsMutations = {
             }
 
             const updated = await cms.save()
-            return buildResponse.cms.success.edited(updated)
+            const cmsData = await buildCmsResponse(updated)
+            return buildResponse.cms.success.edited(cmsData)
         } catch (error) {
             throw error
         }
@@ -476,35 +526,7 @@ module.exports.CmsQueries = {
     async getAllCmsContent() {
         try {
             const content = await CMS.find()
-
-            const routePrefix = '/dashboard'
-            const dashboardRoutes = [
-                { label: 'User Profile', route: `${routePrefix}` },
-                { label: 'Landing Page', route: `${routePrefix}/landing` },
-                {
-                    label: 'Call To Action',
-                    route: `${routePrefix}/calltoaction`
-                },
-                { label: 'About Page', route: `${routePrefix}/about` },
-                { label: 'Footer', route: `${routePrefix}/footer` },
-                { label: 'Services Page', route: `${routePrefix}/services` },
-                { label: 'FAQs Page', route: `${routePrefix}/faqs` },
-                {
-                    label: 'Newsletter Users',
-                    route: `${routePrefix}/newsletter-users`
-                },
-                {
-                    label: 'Newsletter Records',
-                    route: `${routePrefix}/newsletter-records`
-                }
-            ]
-
-            const users = await getAllParticipants()
-            const records = await getAllNewsletterRecords()
-
-            const cmsData = content[0]
-            cmsData._doc.dashboard = dashboardRoutes
-            cmsData._doc.newsletter = { users, records }
+            const cmsData = await buildCmsResponse(content[0])
             return buildResponse.cms.success.contentFetched(cmsData)
         } catch (error) {
             throw error
