@@ -96,7 +96,49 @@ module.exports.UserMutations = {
             throw new Error(error)
         }
     },
-    async updatePassword(_, { newPassword, token }) {
+    async updatePassword(_, { newPassword }, context) {
+        const decoded = validateToken(context)
+        if (!decoded.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
+
+        const { errors, valid } = validatePassword({ password: newPassword })
+
+        if (!valid) {
+            return buildResponse.form.errors.badInput(errors)
+        }
+
+        try {
+            const sanitizedEmail = decoded.user.email.toLowerCase()
+            const user = await User.findOne({ email: sanitizedEmail })
+
+            if (!user) {
+                return buildResponse.user.errors.userNotFound()
+            }
+
+            const isSamePassword = await bcrypt.compareSync(
+                newPassword,
+                user.password
+            )
+
+            if (isSamePassword) {
+                return buildResponse.user.errors.matchingPasswords()
+            }
+
+            bcrypt.genSalt(12, (err, salt) => {
+                bcrypt.hash(newPassword, salt, async (error, hash) => {
+                    user.password = hash
+                    await user.save()
+                })
+            })
+
+            const token = generateToken(user)
+            return buildResponse.user.success.loggedIn(user, token)
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+    async resetPassword(_, { newPassword, token }) {
         const decoded = jwt_decode(token)
 
         if (!token || !isTokenExpired(decoded.exp)) {
@@ -117,7 +159,7 @@ module.exports.UserMutations = {
                 return buildResponse.user.errors.userNotFound()
             }
 
-            const isSamePassword = bcrypt.compareSync(
+            const isSamePassword = await bcrypt.compareSync(
                 newPassword,
                 user.password
             )
