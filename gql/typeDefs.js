@@ -346,7 +346,8 @@ const typeDefs = gql`
             lastName: String!
         ): UserResponse
         login(email: String!, password: String!): UserResponse
-        updatePassword(newPassword: String!, token: String!): UserResponse
+        updatePassword(newPassword: String!): UserResponse
+        resetPassword(newPassword: String!, token: String!): UserResponse
         deleteUser(id: String!): MultiUserResponse
         sendPasswordResetEmail(email: String!): UserResponse
 
