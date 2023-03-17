@@ -185,7 +185,7 @@ module.exports.CmsMutations = {
             return buildResponse.user.errors.invalidToken()
         }
 
-        const isValid = Object.values(input).some(value => !value)
+        const isValid = Object.values(input).some(value => value)
         if (!isValid) {
             return buildResponse.input.errors.someFieldsRequired(
                 'Primary Page Header, Secondary Page Header, Description, Hero Image',
