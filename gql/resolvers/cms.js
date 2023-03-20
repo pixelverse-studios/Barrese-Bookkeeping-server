@@ -90,7 +90,7 @@ module.exports.CmsMutations = {
             const cms = await getCms(cmsID)
 
             for (const [key, value] of Object.entries(input)) {
-                cms.callToAction[key] = value ? value : cms.callToAction[key]
+                cms.callToAction[key] = value
             }
 
             const updated = await cms.save()
@@ -117,7 +117,7 @@ module.exports.CmsMutations = {
         try {
             const cms = await getCms(cmsID)
             for (const [key, value] of Object.entries(input)) {
-                cms.landing[key] = value ? value : cms.landing[key]
+                cms.landing[key] = value
             }
 
             const updated = await cms.save()
@@ -144,7 +144,7 @@ module.exports.CmsMutations = {
         try {
             const cms = await getCms(cmsID)
             for (const [key, value] of Object.entries(input)) {
-                cms.about[key] = value ? value : cms.about[key]
+                cms.about[key] = value
             }
 
             const updated = await cms.save()
@@ -195,7 +195,7 @@ module.exports.CmsMutations = {
 
         const cms = await getCms(cmsID)
         for (const [key, value] of Object.entries(input)) {
-            cms.services[key] = value ? value : cms.services[key]
+            cms.services[key] = value
         }
 
         const updated = await cms.save()
@@ -254,20 +254,11 @@ module.exports.CmsMutations = {
 
         try {
             const cms = await getCms(cmsID)
-            cms.services.offerings.id(offeringID).icon = !!input.icon
-                ? input.icon
-                : cms.services.offerings.id(offeringID).title
-            cms.services.offerings.id(offeringID).title = !!input.title
-                ? input.title
-                : cms.services.offerings.id(offeringID).title
+            cms.services.offerings.id(offeringID).icon = input.icon
+            cms.services.offerings.id(offeringID).title = input.title
             cms.services.offerings.id(offeringID).description =
-                !!input.description
-                    ? input.description
-                    : cms.services.offerings.id(offeringID).description
-            cms.services.offerings.id(offeringID).bullets = !!input.bullets
-                ? input.bullets.filter(bullet => bullet)
-                : cms.services.offerings.id(offeringID).bullets
-
+                input.description
+            cms.services.offerings.id(offeringID).bullets = input.bullets
             const updated = await cms.save()
             const cmsData = await buildCmsResponse(updated)
             return buildResponse.cms.success.edited(cmsData)
@@ -341,9 +332,7 @@ module.exports.CmsMutations = {
             const cms = await getCms(cmsID)
             const faqToEdit = cms.faqs.qAndA.id(faqID)
             faqToEdit.question = input.question
-                ? input.question
-                : faqToEdit.question
-            faqToEdit.answer = input.answer ? input.answer : faqToEdit.answer
+            faqToEdit.answer = input.answer
 
             const updated = await cms.save()
             const cmsData = await buildCmsResponse(updated)
@@ -393,7 +382,7 @@ module.exports.CmsMutations = {
         try {
             const cms = await getCms(cmsID)
             for (const [key, value] of Object.entries(input)) {
-                cms.faqs[key] = value ? value : cms.faqs[key]
+                cms.faqs[key] = value
             }
 
             const updated = await cms.save()
@@ -458,10 +447,7 @@ module.exports.CmsMutations = {
             const cms = await getCms(cmsID)
             const blogToEdit = cms.blog.blogs.id(blogID)
             Object.entries(input).forEach(
-                ([key]) =>
-                    (blogToEdit[key] = input[key]
-                        ? input[key]
-                        : blogToEdit[key])
+                ([key]) => (blogToEdit[key] = input[key])
             )
 
             const updated = await cms.save()
@@ -510,7 +496,7 @@ module.exports.CmsMutations = {
         try {
             const cms = await getCms(cmsID)
             for (const [key, value] of Object.entries(input)) {
-                cms.blog[key] = value ? value : cms.blog[key]
+                cms.blog[key] = value
             }
 
             const updated = await cms.save()
