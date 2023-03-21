@@ -183,6 +183,8 @@ const typeDefs = gql`
         heroBannerH1: String
         heroBannerH2: String
         subtext: String
+        header: String
+        subHeader: String
     }
 
     type DashboardFields {
@@ -328,6 +330,8 @@ const typeDefs = gql`
         heroBannerH1: String
         heroBannerH2: String
         subtext: String
+        header: String
+        subHeader: String
     }
 
     input InputServiceContentFields {

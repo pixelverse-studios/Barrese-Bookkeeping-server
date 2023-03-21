@@ -58,7 +58,9 @@ const cmsSchema = new Schema({
         heroImage: String,
         heroBannerH1: String,
         heroBannerH2: String,
-        subtext: String
+        subtext: String,
+        header: String,
+        subHeader: String
     }
 })
 
