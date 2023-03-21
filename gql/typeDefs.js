@@ -113,7 +113,7 @@ const typeDefs = gql`
 
     type AboutFields {
         profilePic: String
-        backgroundInfo: String
+        backgroundInfo: [String]
         role: String
         title: String
         header: String
@@ -251,7 +251,7 @@ const typeDefs = gql`
 
     input InputAboutFields {
         profilePic: String
-        backgroundInfo: String
+        backgroundInfo: [String]
         role: String
         title: String
         header: String
