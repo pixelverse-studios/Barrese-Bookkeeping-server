@@ -9,7 +9,7 @@ const cmsSchema = new Schema({
     },
     about: {
         profilePic: String,
-        backgroundInfo: String,
+        backgroundInfo: [String],
         role: String,
         title: String,
         header: String,
