@@ -81,7 +81,11 @@ module.exports.NewsletterUserMutations = {
     }
 }
 module.exports.NewsletterUserQueries = {
-    async getSubscribedUsers() {
+    async getSubscribedUsers(_, {}, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
         try {
             const subscribedUsers = await getSubscribedParticipants()
             return buildResponse.newsletter.success.usersFetched(
@@ -91,7 +95,11 @@ module.exports.NewsletterUserQueries = {
             throw error
         }
     },
-    async getAllNewsletterUsers() {
+    async getAllNewsletterUsers(_, {}, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
         try {
             const allUsers = await getAllParticipants()
             return buildResponse.newsletter.success.usersFetched(allUsers)
