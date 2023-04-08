@@ -4,7 +4,7 @@ module.exports.resetPasswordEmail = async (email, token) => {
     const transporter = await createTransporter()
 
     const header =
-        '<header style="color: #3fc1aa; font-size: 2rem; margin-bottom: 1rem;">EZPZ Coding</header>'
+        '<header style="color: #3fc1aa; font-size: 2rem; margin-bottom: 1rem;">Barrese Bookkeeping</header>'
     const message =
         '<div style="font-size: 1.5rem">To reset your password, click the link below.</div>'
     const pageRoute = 'password/reset'

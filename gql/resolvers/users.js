@@ -81,7 +81,7 @@ module.exports.UserMutations = {
                 return buildResponse.user.errors.invalidCredentials()
             }
             const user = await User.findOne({ email })
-
+            // console.log(user)
             if (!user) {
                 return buildResponse.user.errors.userNotFound()
             }
@@ -91,6 +91,7 @@ module.exports.UserMutations = {
 
             return buildResponse.user.success.loggedIn(user, token)
         } catch (error) {
+            console.log(error)
             throw new Error(error)
         }
     },
