@@ -54,7 +54,9 @@ async function startApolloServer() {
                 return { req, user }
             }
         },
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        introspection: false,
+        playground: false
     })
     await server.start()
     server.applyMiddleware({ app })
