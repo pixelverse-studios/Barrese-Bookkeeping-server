@@ -13,13 +13,18 @@ module.exports.generateToken = user => {
 
 module.exports.generateResetPwToken = user => {
     const userData = {
-        id: user._id,
+        _id: user._id,
         email: user.email
     }
 
-    return jwt.sign({ ...userData }, process.env?.TOKEN_SECRET ?? '', {
-        expiresIn: '1hr'
-    })
+    const newToken = jwt.sign(
+        { ...userData },
+        process.env?.TOKEN_SECRET ?? '',
+        {
+            expiresIn: '1hr'
+        }
+    )
+    return newToken
 }
 
 const isTokenExpired = expiration => {
