@@ -45,7 +45,11 @@ module.exports.NewsletterRecordsMutations = {
     }
 }
 module.exports.NewsletterRecordsQueries = {
-    async getAllNewsletterRecords() {
+    async getAllNewsletterRecords(_, {}, context) {
+        const token = validateToken(context)
+        if (!token.valid) {
+            return buildResponse.user.errors.invalidToken()
+        }
         try {
             const allRecords = await getAllNewsletterRecords()
             if (!allRecords.length) {
