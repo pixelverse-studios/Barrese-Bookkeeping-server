@@ -32,9 +32,8 @@ module.exports.UserMutations = {
             }
 
             const user = await User.findOne({ email })
-            if (user) {
-                return buildResponse.user.errors.emailInUse()
-            }
+            if (user) return buildResponse.user.errors.emailInUse()
+
             const salt = bcrypt.genSaltSync()
             const hashedPw = bcrypt.hashSync(password, salt)
             const newUser = new User({
@@ -59,9 +58,7 @@ module.exports.UserMutations = {
         const sanitizedEmail = email.toLowerCase()
         try {
             const user = await User.findOne({ email: sanitizedEmail })
-            if (!user) {
-                return buildResponse.form.user.errors.userNotFound()
-            }
+            if (!user) return buildResponse.user.errors.userNotFound()
 
             const match = await bcrypt.compare(password, user.password)
             if (!match) {
@@ -74,6 +71,7 @@ module.exports.UserMutations = {
             console.log('-------')
             return buildResponse.user.success.loggedIn(user, token)
         } catch (error) {
+            console.log(error)
             return new Error(error)
         }
     },
