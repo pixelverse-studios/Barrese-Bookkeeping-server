@@ -27,6 +27,7 @@ module.exports.UserMutations = {
                 firstName,
                 lastName
             })
+            console.log(errors)
             if (!valid) {
                 return buildResponse.form.errors.badInput(errors)
             }
@@ -47,6 +48,7 @@ module.exports.UserMutations = {
 
             return buildResponse.user.success.registered(savedUser, token)
         } catch (error) {
+            console.log(error)
             return new Error(error)
         }
     },
