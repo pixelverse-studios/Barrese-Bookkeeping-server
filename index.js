@@ -56,8 +56,8 @@ async function startApolloServer() {
             }
         },
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-        introspection: isProd,
-        playground: isProd
+        introspection: !isProd,
+        playground: !isProd
     })
     await server.start()
     server.applyMiddleware({ app })
